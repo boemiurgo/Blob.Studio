@@ -441,7 +441,7 @@ html>body{padding:0}</style>
         <label class="slider-field text-first-slider"><span>Gap<output data-value="gap" data-unit="px">100 px</output></span><input type="range" min="0" max="240" value="100" data-setting="gap" aria-label="Gap between logo and text"></label>
         <label class="slider-field size-ratio"><span>Size ratio<output data-value="sizeRatio">0%</output></span><input type="range" min="-100" max="100" value="0" data-setting="sizeRatio" aria-label="Size ratio between logo and text"><span class="ratio-ends" aria-hidden="true"><span>Bigger logo</span><span>Bigger text</span></span></label>
       </section>
-      <details class="control-menu" id="logo-menu" data-logo-controls><summary>Logo options</summary><div class="menu-controls">
+      <details class="control-menu" id="logo-menu" data-logo-controls open><summary>Logo options</summary><div class="menu-controls">
         <section class="control-section" aria-labelledby="colors-heading"><h2 id="colors-heading">Colors</h2>
           <div class="color-row"><label for="surface-btn">Surface</label><div class="color-picker"><output id="surface-value">#FFFFFF</output><button type="button" id="surface-btn" class="color-swatch-btn" data-color-for="surface" data-setting-key="surface" aria-label="Surface color"></button><input id="surface" type="color" value="#ffffff" data-setting="surface" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <div class="color-row"><label for="body-color-btn">Body</label><div class="color-picker"><output id="body-value">#000000</output><button type="button" id="body-color-btn" class="color-swatch-btn" data-color-for="body-color" data-setting-key="body" aria-label="Body color"></button><input id="body-color" type="color" value="#000000" data-setting="body" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
@@ -458,7 +458,7 @@ html>body{padding:0}</style>
           <label class="slider-field" data-3d-only hidden><span>Tilt<output data-value="logoTilt" data-unit="deg">0°</output></span><input type="range" min="-80" max="80" value="0" data-setting="logoTilt" aria-label="Logo tilt"><span class="ratio-ends" aria-hidden="true"><span>Lean forward</span><span>Lean back</span></span></label>
         </section>
       </div></details>
-      <details class="control-menu" id="text-menu" data-text-controls hidden><summary>Text options</summary><div class="menu-controls">
+      <details class="control-menu" id="text-menu" data-text-controls hidden open><summary>Text options</summary><div class="menu-controls">
         <section class="control-section" aria-labelledby="text-heading"><h2 id="text-heading">Text</h2>
           <div class="color-row"><label for="text-color-btn">Color</label><div class="color-picker"><output id="textColor-value">#000000</output><button type="button" id="text-color-btn" class="color-swatch-btn" data-color-for="text-color" data-setting-key="textColor" aria-label="Text color"></button><input id="text-color" type="color" value="#000000" data-setting="textColor" class="color-input-hidden" tabindex="-1" aria-hidden="true"></div></div>
           <label class="slider-field text-first-slider"><span>Letter spacing<output data-value="textSpacing" data-unit="px">0 px</output></span><input type="range" min="-40" max="120" value="0" data-setting="textSpacing" aria-label="Letter spacing"></label>
@@ -2930,6 +2930,15 @@ html[data-visualize-standalone],body{background-color:#f6f6f1;background-image:r
     showPanel(key,false);
     $('toggle-'+key).addEventListener('click',()=>showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true'));
   }
+  // Arrow keys open and close the panels: up Camera, down Downloads.
+  // Ignored while typing, on sliders and pickers, inside pop-ups, or when something else already used the key.
+  const ARROW_PANEL={ArrowUp:'camera',ArrowDown:'downloads'};
+  document.addEventListener('keydown',event=>{
+    const key=ARROW_PANEL[event.key],t=event.target;
+    if(!key||event.defaultPrevented||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
+    if(t.closest&&t.closest('input,select,textarea,[contenteditable],[role="listbox"],dialog,.bg-menu,.color-sheet'))return;
+    event.preventDefault();showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true');
+  });
   // Quick download icons press the real buttons and mirror their enabled state and zip count.
   root.querySelectorAll('[data-download-for]').forEach(btn=>{
     const target=$(btn.dataset.downloadFor),count=btn.querySelector('.rail-count');
