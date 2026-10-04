@@ -4102,6 +4102,15 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     showPanel(key,PANEL_OPEN[key]);
     $('toggle-'+key).addEventListener('click',()=>showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true'));
   }
+  // Arrow keys open and close the panels: left Options, right Uploads, up Lights & camera, down Downloads.
+  // Ignored while typing, on sliders and pickers, inside pop-ups, or when something else already used the key.
+  const ARROW_PANEL={ArrowLeft:'options',ArrowRight:'uploads',ArrowUp:'lights',ArrowDown:'downloads'};
+  document.addEventListener('keydown',event=>{
+    const key=ARROW_PANEL[event.key],t=event.target;
+    if(!key||event.defaultPrevented||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
+    if(t.closest&&t.closest('input,select,textarea,[contenteditable],[role="listbox"],dialog,.bg-menu,.color-sheet'))return;
+    event.preventDefault();showPanel(key,$('toggle-'+key).getAttribute('aria-expanded')!=='true');
+  });
   // Double-clicking an icon on the collapsed Options rail picks it and opens the full panel.
   root.querySelector('.settings-panel .panel-rail').addEventListener('dblclick',event=>{if(event.target.closest('button'))showPanel('options',true);});
   // Rail shortcuts open the same file picker as the full upload buttons.
