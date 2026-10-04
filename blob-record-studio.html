@@ -1135,11 +1135,11 @@ html>body{padding:0}</style>
       </div></section>
         </div>
       </div>
-      <div id="stage" role="region" class="logo-stage" aria-label="Live record preview"><div class="view3d-bar" id="view3d-bar" hidden><span id="view-hint">Drag to rotate · two fingers to move · pinch to zoom</span><button type="button" id="spin-view" class="button quiet" aria-pressed="false" title="Turn the camera slowly around the record">Spin</button><button type="button" id="reset-view" class="button quiet">Reset view</button></div></div>
+      <div class="stage-fit"><div id="stage" role="region" class="logo-stage" aria-label="Live record preview"><div class="view3d-bar" id="view3d-bar" hidden><span id="view-hint">Drag to rotate · two fingers to move · pinch to zoom</span><button type="button" id="spin-view" class="button quiet" aria-pressed="false" title="Turn the camera slowly around the record">Spin</button><button type="button" id="reset-view" class="button quiet">Reset view</button></div></div></div>
       <section class="download-panel" id="download-panel" aria-label="Image downloads">
         <button type="button" class="panel-toggle" id="toggle-downloads" aria-expanded="true" aria-controls="download-panel" title="Hide downloads"><span class="panel-toggle-label">Downloads</span><span class="chev" aria-hidden="true"></span></button>
         <div class="download-rail" role="group" aria-label="Quick downloads"><button type="button" class="rail-png" data-download-for="download-png" aria-label="Download PNG" title="Download PNG"><span>PNG</span></button><button type="button" data-download-for="download-svg" aria-label="Download SVG" title="Download SVG"><span>SVG</span></button><button type="button" data-download-for="take-photo" aria-label="Take photo" title="Take photo"><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M2.5 6.5h5l2-3h5l2 3h5v12h-19z"/><circle class="i-line" cx="12" cy="12" r="3.6"/></svg></button><button type="button" data-download-for="download-zip" aria-label="Download zip" title="Download zip" disabled><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M4.5 1.5h15v19h-15z"/><path class="i-line" d="M12 1.5v3m0 2v3m0 2v3"/><rect class="i-fill" x="10" y="14" width="4" height="4"/></svg><b class="rail-count" hidden></b></button></div>
-        <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
+        <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="field png-format"><select id="export-format" aria-label="Photo format" title="Photo format"><option value="1:1">1:1 · Square</option><option value="4:3">4:3</option><option value="16:9" selected>16:9</option><option value="2:1">2:1</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
         <div class="photos" id="photos" hidden><button type="button" class="photos-head" id="photos-toggle" aria-expanded="true" aria-controls="photo-strip"><span>Photos <b id="photo-count">0</b></span><span>PNG + SVG each · cleared after download</span></button><div class="photo-strip" id="photo-strip"></div></div>
         <details class="file-menu" id="file-menu"><summary>Presets &amp; project</summary>
         <div class="field version-field"><span id="version-label">Preset</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="custom">Custom edits</option><optgroup label="Built-in"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option></optgroup></select></div></div>
@@ -2247,7 +2247,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
 /* Desktop: segment buttons share space by label length so long labels stay on one line */
 @media(min-width:661px) {#blob-app .settings-panel .mode-picker button {flex:1 1 auto;}}
 /* Downloads hidden: only the header bar stays */
-@media(min-width:661px) {#blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail) {display:none!important;}}
+@media(min-width:661px) {#blob-app.downloads-hidden .download-panel > :not(#toggle-downloads):not(.download-rail):not(.export-controls) {display:none!important;}}
 #blob-app.downloads-hidden .download-panel #toggle-downloads {margin:0;}
 #blob-app.downloads-hidden #toggle-downloads .chev {transform:translateY(2px) rotate(-135deg);}
 /* Background panel: the toolbar's Background header opens backdrop, light and camera controls below it */
@@ -2311,6 +2311,32 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   /* Phone: the page is the only scroller; panels that trap the swipe would stop it scrolling */
   #blob-app .settings-panel,#blob-app .upload-panel,#blob-app .download-panel {overflow:visible!important;overscroll-behavior:auto!important;max-height:none;height:auto;}
 }
+
+/* Photo format (stage border is 2px a side, so the inside keeps the exact ratio): the preview takes the chosen shape (largest fit, centred); PNGs and photos follow it */
+#blob-app .stage-fit{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;}
+@media(min-width:661px) {
+  #blob-app .stage-fit{container-type:size;}
+  #blob-app .stage-fit > .logo-stage{--inner:min(calc(100cqw - 4px),calc((100cqh - 4px) * var(--fmt,1.7778)));width:calc(var(--inner) + 4px)!important;height:calc(var(--inner) / var(--fmt,1.7778) + 4px)!important;aspect-ratio:auto!important;flex:none;}
+}
+@media(max-width:660px) {
+  #blob-app .stage-fit{order:2;position:sticky;top:0;z-index:5;width:100%;container-type:inline-size;background:#f6f6f1;}
+  #blob-app .stage-fit > .logo-stage{position:relative!important;top:auto;--inner:min(calc(100cqw - 4px),calc(52vh * var(--fmt,1.7778)));width:calc(var(--inner) + 4px)!important;height:calc(var(--inner) / var(--fmt,1.7778) + 4px)!important;aspect-ratio:auto!important;margin-inline:auto;}
+}
+#blob-app .export-controls > .png-format{flex:0 0 120px;width:auto;margin:0;}
+#blob-app .export-controls > .png-format select{height:100%;min-height:39px;}
+@container (max-width:640px) {
+  #blob-app .export-controls > .png-size,#blob-app .export-controls > .png-format{flex:1 1 calc(50% - 4px);}
+}
+/* Size and format sit on the right, open or collapsed */
+#blob-app .export-controls > .field{order:1;}
+/* Downloads hidden: format and size stay next to the quick icons */
+@media(min-width:661px) {
+  #blob-app.downloads-hidden .download-panel{flex-wrap:wrap;}
+  #blob-app.downloads-hidden .download-panel > .export-controls{display:flex!important;flex:0 1 auto;flex-wrap:nowrap;gap:6px;}
+  #blob-app.downloads-hidden .export-controls > .button{display:none!important;}
+  #blob-app.downloads-hidden .export-controls > .field{flex:0 0 auto;width:auto;}
+  #blob-app.downloads-hidden .export-controls > .field select{min-height:32px;height:32px;padding-top:0;padding-bottom:0;}
+}
 </style>
 <script>
 (() => {
@@ -2339,7 +2365,8 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   let state={...defaults}, committed={...defaults}, undoStack=[], redoStack=[], savedVersions=[], photos=[], legacyBulk=[], saveTimer=null;
   // Uploaded images live outside the settings so undo and versions only carry a short id.
   let images={};
-  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,name:'My record',project:'My project',selected:'classic',includeBackground:true,view3d:false,camera:{yaw:-24,pitch:10,zoom:1,fov:20,panX:0,panY:0},cameraFlat:{yaw:-20,pitch:52,zoom:1,fov:20,panX:0,panY:0}};
+  const FORMATS={'1:1':1,'4:3':4/3,'16:9':16/9,'2:1':2};
+  let preferences={background:'custom',customBackground:'#e6e2da',size:4096,format:'16:9',name:'My record',project:'My project',selected:'classic',includeBackground:true,view3d:false,camera:{yaw:-24,pitch:10,zoom:1,fov:20,panX:0,panY:0},cameraFlat:{yaw:-20,pitch:52,zoom:1,fov:20,panX:0,panY:0}};
   let storageOK=true;
   const inputList=[...root.querySelectorAll('[data-setting]')];
   const img=(id,x,y,w,h=w)=>'<image id="'+id+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="xMidYMid slice"/>';
@@ -3256,7 +3283,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   async function png3d(width){
     const r=canvas3d.getBoundingClientRect();if(!r.width||!r.height)throw Error('the preview is not visible.');
     const max=Math.min(...gl.getParameter(gl.MAX_VIEWPORT_DIMS),gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
-    let w=width,h=Math.round(width*r.height/r.width);if(w>max||h>max){const k=max/Math.max(w,h);w=Math.floor(w*k);h=Math.floor(h*k);}
+    let w=width,h=Math.round(width/FORMATS[preferences.format]);if(w>max||h>max){const k=max/Math.max(w,h);w=Math.floor(w*k);h=Math.floor(h*k);}
     canvas3d.width=w;canvas3d.height=h;
     try{
       draw3d(gl.drawingBufferWidth,gl.drawingBufferHeight,fitHalfH(r.width,r.height,stagePad()),true);
@@ -3326,7 +3353,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     $('custom-bg-btn').style.setProperty('--custom-bg',preferences.customBackground);
     $('custom-bg-color').value=preferences.customBackground;
     root.querySelectorAll('[data-background]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.background===preferences.background)));
-    $('export-size').value=preferences.size;
+    $('export-size').value=preferences.size;$('export-format').value=preferences.format;root.style.setProperty('--fmt',String(FORMATS[preferences.format]));
     $('version-select').value=preferences.selected;
     updateVersionButton();
     // 3D view: the same steady frame as the flat preview sets the camera's framing.
@@ -3813,6 +3840,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   $('custom-bg-color').addEventListener('input',()=>{preferences.customBackground=$('custom-bg-color').value.toLowerCase();preferences.background='custom';paint();rememberSoon();});
   $('custom-bg-color').addEventListener('change',persist);
   $('export-size').addEventListener('change',()=>{preferences.size=Number($('export-size').value);paint();persist();});
+  $('export-format').addEventListener('change',()=>{preferences.format=$('export-format').value;paint();persist();});
   $('version-name').addEventListener('input',()=>{preferences.name=$('version-name').value.slice(0,64);rememberSoon();});
   $('version-name').addEventListener('change',persist);
   // Custom "Starting version" dropdown: mirrors the hidden <select> and adds a bin to saved versions.
@@ -3937,7 +3965,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   const canvasPNG=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG creation failed.')),'image/png'));
   // PNG downloads and photos capture the preview window itself, edge to edge, at the chosen width.
   function stageBox(){
-    const stage=$('stage'),cw=stage.clientWidth,ch=stage.clientHeight;if(!cw||!ch)throw Error('the preview is not visible.');
+    const stage=$('stage'),cw=stage.clientWidth,ch=cw/FORMATS[preferences.format];if(!cw||!stage.clientHeight)throw Error('the preview is not visible.');
     const vb=svg.viewBox.baseVal,r=svg.getBoundingClientRect(),s=Math.min(r.width/vb.width,r.height/vb.height);if(!s)throw Error('the preview is not ready.');
     const sr=stage.getBoundingClientRect(),left=sr.left+stage.clientLeft,top=sr.top+stage.clientTop;
     return [vb.x+vb.width/2+(left-r.left-r.width/2)/s,vb.y+vb.height/2+(top-r.top-r.height/2)/s,cw/s,ch/s];
@@ -4111,6 +4139,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     if(['checker','light','dark','custom'].includes(prefs?.background))preferences.background=prefs.background;
     if(/^#[0-9a-f]{6}$/i.test(prefs?.customBackground||''))preferences.customBackground=prefs.customBackground.toLowerCase();
     if([1024,2048,4096].includes(prefs?.size))preferences.size=prefs.size;
+    if(Object.hasOwn(FORMATS,String(prefs?.format)))preferences.format=prefs.format;
     if(typeof prefs?.includeBackground==='boolean')preferences.includeBackground=prefs.includeBackground;
     if(typeof prefs?.view3d==='boolean')preferences.view3d=prefs.view3d;
     if(prefs?.camera)preferences.camera=validCamera(prefs.camera,'upright');
