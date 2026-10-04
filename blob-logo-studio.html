@@ -2552,7 +2552,7 @@ html[data-visualize-standalone],body{background-color:#f6f6f1;background-image:r
     input.addEventListener('keydown',event=>{if(event.key==='Delete'||event.key==='Backspace')reset(event);});
   });
   root.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{changeTo({...state,[button.dataset.choice]:button.dataset.option});notice('Layout updated.');}));
-  root.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.mode==='both'&&state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=false);changeTo({...state,mode:button.dataset.mode});notice({logo:'Edit the logo on its own.',text:'Edit the original pixel lettering.',both:'Edit the logo and text together.'}[state.mode]);}));
+  root.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.mode==='both'&&state.mode!=='both')root.querySelectorAll('.control-menu').forEach(el=>el.open=true);changeTo({...state,mode:button.dataset.mode});notice({logo:'Edit the logo on its own.',text:'Edit the original pixel lettering.',both:'Edit the logo and text together.'}[state.mode]);}));
   $('preset-select').addEventListener('change',()=>{
     const key=$('preset-select').value;preferences.selected=key;
     if(key==='custom'){paint();persist();return;}
