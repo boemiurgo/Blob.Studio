@@ -1139,7 +1139,7 @@ html>body{padding:0}</style>
       <section class="download-panel" id="download-panel" aria-label="Image downloads">
         <button type="button" class="panel-toggle" id="toggle-downloads" aria-expanded="true" aria-controls="download-panel" title="Hide downloads"><span class="panel-toggle-label">Downloads</span><span class="chev" aria-hidden="true"></span></button>
         <div class="download-rail" role="group" aria-label="Quick downloads"><button type="button" class="rail-png" data-download-for="download-png" aria-label="Download PNG" title="Download PNG"><span>PNG</span></button><button type="button" data-download-for="download-svg" aria-label="Download SVG" title="Download SVG"><span>SVG</span></button><button type="button" data-download-for="download-zip" aria-label="Download zip" title="Download zip" disabled><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M4.5 1.5h15v19h-15z"/><path class="i-line" d="M12 1.5v3m0 2v3m0 2v3"/><rect class="i-fill" x="10" y="14" width="4" height="4"/></svg><b class="rail-count" hidden></b></button></div><div class="download-rail photo-rail" role="group" aria-label="Quick photo"><button type="button" data-download-for="take-photo" aria-label="Take photo" title="Take photo"><svg viewBox="0 0 24 22" aria-hidden="true"><path class="i-line" d="M2.5 6.5h5l2-3h5l2 3h5v12h-19z"/><circle class="i-line" cx="12" cy="12" r="3.6"/></svg></button></div>
-        <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="field png-format"><select id="export-format" aria-label="Photo format" title="Photo format"><option value="1:1">1:1 · Square</option><option value="4:3">4:3</option><option value="16:9" selected>16:9</option><option value="2:1">2:1</option></select></label><button id="download-png" class="button primary">Download PNG</button><button id="download-svg" class="button secondary">Download SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" disabled>Download zip (0)</button></div>
+        <div class="export-controls"><label class="field png-size"><select id="export-size" aria-label="PNG size"><option value="1024">1024 px</option><option value="2048">2048 px</option><option value="4096" selected>4096 px · HD</option></select></label><label class="field png-format"><select id="export-format" aria-label="Photo format" title="Photo format"><option value="1:1">1:1 · Square</option><option value="4:3">4:3</option><option value="16:9" selected>16:9</option><option value="2:1">2:1</option></select></label><button id="download-png" class="button primary" title="Download PNG">PNG</button><button id="download-svg" class="button secondary" title="Download SVG">SVG</button><button type="button" id="take-photo" class="button secondary">Take photo</button><button type="button" id="download-zip" class="button secondary" title="Download the photos as a zip" disabled>ZIP (0)</button></div>
         <div class="photos" id="photos" hidden><button type="button" class="photos-head" id="photos-toggle" aria-expanded="true" aria-controls="photo-strip"><span>Photos <b id="photo-count">0</b></span><span>PNG + SVG each · cleared after download</span></button><div class="photo-strip" id="photo-strip"></div></div>
         <details class="file-menu" id="file-menu"><summary>Presets &amp; project</summary>
         <div class="field version-field"><span id="version-label">Preset</span><div class="version-picker" id="version-picker"><button type="button" id="version-button" class="version-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="version-label version-current"><span id="version-current">Classic black</span></button><ul id="version-list" class="version-list" role="listbox" aria-labelledby="version-label" hidden></ul><select id="version-select" hidden aria-hidden="true" tabindex="-1"><option value="custom">Custom edits</option><optgroup label="Built-in"><option value="classic">Classic black</option><option value="clear">Clear vinyl</option><option value="marble">Marble</option><option value="splatter">Splatter</option></optgroup></select></div></div>
@@ -3997,12 +3997,12 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
     }finally{URL.revokeObjectURL(url);}
   }
   $('download-png').addEventListener('click',async()=>{
-    const button=$('download-png');button.disabled=true;button.textContent='Preparing PNG…';
+    const button=$('download-png');button.disabled=true;button.textContent='PNG…';
     try{
       commit();const width=preferences.size,name=filename();
       const png=is3d()?await png3d(width):await stagePNG(width);
       download(png,name+'-'+width+'px.png');notice((includeBackdrop()?'PNG with its background':'Transparent PNG')+' download started.');
-    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='Download PNG';}
+    }catch(e){notice('Could not export PNG: '+e.message,true);}finally{button.disabled=false;button.textContent='PNG';}
   });
   function dataURLToBlob(dataUrl){const [head,body]=dataUrl.split(',');const type=/data:(.*?);base64/.exec(head)[1];const bytes=atob(body);const array=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)array[i]=bytes.charCodeAt(i);return new Blob([array],{type});}
   function crc32(bytes){
@@ -4066,7 +4066,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
   }
   function renderPhotos(){
     const count=photos.length;
-    $('download-zip').textContent='Download zip ('+count+')';$('download-zip').disabled=!count;
+    $('download-zip').textContent='ZIP ('+count+')';$('download-zip').disabled=!count;
     $('photos').hidden=!count;$('photo-count').textContent=count;
     $('photo-strip').replaceChildren(...photos.map((photo,i)=>{
       const item=document.createElement('div');item.className='photo-thumb';
@@ -4126,7 +4126,7 @@ html[data-visualize-standalone],body {background-color:#f6f6f1;background-image:
       const photo={id:newId(),app:PHOTO_APP,takenAt:Date.now(),png,svg:svgText,thumb:await thumbnail(png),view:on3d?'3d':'record'};
       photos.push(photo);renderPhotos();
       try{await photoStore.put(photo);}catch(e){notice('Photo '+photos.length+' taken, but it is kept only until this page closes: browser storage is unavailable.',true);return;}
-      notice('Photo '+photos.length+' taken. '+(on3d?'3D photos are saved as PNG only.':'Download zip saves every photo as PNG + SVG.'));
+      notice('Photo '+photos.length+' taken. '+(on3d?'3D photos are saved as PNG only.':'ZIP saves every photo as PNG + SVG.'));
     }catch(e){notice('Could not take the photo: '+e.message,true);}finally{button.disabled=false;button.textContent='Take photo';}
   });
   function photosName(){const d=new Date(),p=n=>String(n).padStart(2,'0');return 'blob-record-photos-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
