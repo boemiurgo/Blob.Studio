@@ -23,7 +23,21 @@ Reference files: `index.html` (the hub), `blob-logo-studio.html` and `blob-recor
 
 ## 2. Starting a new studio
 
-1. **Make the file.** Work in its own folder (for example `BLOB.Poster/` for sources and notes), and publish the app beside the hub as `blob-<name>-studio.html`, like the other two.
+1. **Make the folder and the file.** Each studio has its own working folder, and a copy of its HTML file goes in `Blob.Studio/`, which is this repo and the site that gets hosted:
+
+   ```
+   BLOB Studio/
+   ├── BLOB.Poster/                  ← work here
+   │   ├── BLOB Poster Studio.html
+   │   └── Sources/
+   └── Blob.Studio/                  ← the repo: hub + one copy of each studio
+       ├── index.html
+       ├── blob-logo-studio.html
+       ├── blob-record-studio.html
+       └── blob-poster-studio.html   ← copy of BLOB Poster Studio.html
+   ```
+
+   Only the HTML file is copied, because each file is self-contained and sources stay out of the repo. After each change, copy the file again so the two match.
 2. **Head.** Copy these from an existing studio:
    - `<meta charset="utf-8">` and `<meta name="viewport" content="width=device-width, initial-scale=1">`
    - The same Content-Security-Policy meta. It blocks every network request, so the studio works offline and nothing leaks out.
