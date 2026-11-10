@@ -31,7 +31,7 @@ Reference files: `index.html` (the hub), `blob-logo-studio.html` and `blob-recor
    - `<title>BLOB <Name> Studio</title>`
 3. **Fonts.** Copy the two `@font-face` lines for **BLOB Pixel** and **BLOB Grid** from the top of `index.html`'s `<style>`. They're embedded as data URIs, so there are no font files to ship. The source TTFs are in `BLOB.Logo/Sources/Blob Studio design/`.
 4. **Root element.** Put the whole app inside `<main id="blob-app">` and scope every rule to `#blob-app`.
-5. **Tokens.** Paste the token block from section 3.
+5. **Tokens and theme.** Paste the token block from section 3 into a `<style id="blob-studio-theme">` block, and the slider script into `<script id="blob-studio-sliders">`.
 6. **Build** the header, workspace and Downloads panel with the class names in sections 6 to 8, so the shared look carries over.
 7. **Add it to the hub.** Add a card to `index.html` (section 10).
 
@@ -304,7 +304,7 @@ Every studio ends with the same **Downloads** panel in the same order. Only the 
 | Input | Does |
 | --- | --- |
 | Ctrl/⌘ + Z, Ctrl/⌘ + Shift + Z | Undo / redo (header buttons) |
-| Arrow keys (not while typing, on sliders, or in pop-ups) | Open and close panels: ← Options, → Uploads, ↑ toolbar panel (Camera / Lights), ↓ Downloads. Map only the panels your studio has. |
+| Arrow keys (not while typing, on sliders, or in pop-ups) | Open and close panels: ← Options, → Uploads, ↑ the toolbar's Background panel (backdrop, lights, camera), ↓ Downloads. Map only the panels your studio has. |
 | Double-click a slider | Reset it to its starting value |
 | Escape | Close the colour sheet or the dialog |
 
@@ -343,8 +343,7 @@ Give the art a background colour from the palette with `.card-art.<name> { backg
 
 ## Appendix: small differences between the two studios today
 
-These are naming leftovers rather than design choices, so a new studio can follow either.
+These are naming leftovers rather than design choices, so a new studio can follow either. (The theme block and slider script ids are now the same in both: `blob-studio-theme` and `blob-studio-sliders`.)
 
-- The theme `<style>` block is `id="blob-studio-theme"` in Record and `id="blob-8b-theme"` in Logo. Prefer `blob-studio-theme`. The slider script is `blob-studio-sliders` / `blob-8b-sliders`.
 - The preset picker is `.version-*` in Record and `.preset-*` in Logo.
 - The photo strip's open/closed state is stored under `blob-record-photos-open` in Record and `blob-photos-open` in Logo. Use `blob-<name>-photos-open`.
